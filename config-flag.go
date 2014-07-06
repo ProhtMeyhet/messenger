@@ -14,7 +14,7 @@ const EMPTY = ""
 type flagConfig struct {
 	To, From, Type, Title, Message, Icon string
 	Stdin, StdinReadLine, StdinTitle, ShowConfig, Echo, NoSSL, SSLNoVerify bool
-	Timeout int
+	Timeout, Port int
 }
 
 func newFlagConfig() *flagConfig {
@@ -24,6 +24,7 @@ func newFlagConfig() *flagConfig {
 func (flags *flagConfig) parse() {
 	flag.StringVar(&flags.Title, "title", "", "[mandatory] message title")
 	flag.StringVar(&flags.Message, "message", "", "[mandatory] the message")
+	flag.IntVar(&flags.Port, "port", 65222, "port to use")
 	//TODO add multiple to support
 	flag.StringVar(&flags.To, "to", "", "send to")
 	flag.StringVar(&flags.From, "from", "terminal", "who this message is from")

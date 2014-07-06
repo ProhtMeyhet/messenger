@@ -43,15 +43,7 @@ func main() {
 			os.Exit(EMPTY_TO_TCP)
 		}
 
-		config := libmessage.NewTcpPlainConfig()
-
-		if !flags.NoSSL {
-			tlsConfig := tls.Config{}
-			if flags.SSLNoVerify {
-				tlsConfig.InsecureSkipVerify = true
-			}
-			config.SetSSLConfig(tlsConfig)
-		}
+		config := getTcpConfig(flags)
 
 		tcp := libmessage.NewTcpPlain(config)
 
@@ -68,7 +60,11 @@ func main() {
 		}
 		to := &libmessage.To{ /*From: flags.From,*/
 					To: []string{ flags.To } }
-		android := libmessage.NewXmppAndroidpn(libmessage.NewTcpPlainConfig())
+
+		config := getTcpConfig(flags)
+
+		android := libmessage.NewXmppAndroidpn(config)
+
 		send(flags.Timeout, android, message, to)
 	case "stdout":
 		to := &libmessage.To{ /*From: flags.From,*/
@@ -96,6 +92,22 @@ func send(timeout int,
 		fmt.Println("Timeout!")
 		os.Exit(12)
 	}
+}
+
+func getTcpConfig(flags *flagConfig) *libmessage.TcpSenderConfig {
+	config := libmessage.NewTcpPlainConfig()
+
+	config.Port = flags.Port
+
+	if !flags.NoSSL {
+		tlsConfig := tls.Config{}
+		if flags.SSLNoVerify {
+			tlsConfig.InsecureSkipVerify = true
+		}
+		config.SetSSLConfig(tlsConfig)
+	}
+
+	return config
 }
 
 func validate(flags *flagConfig) {
