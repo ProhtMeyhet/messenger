@@ -5,7 +5,7 @@ little messenger tool to send messages either to libnotify, or via tcp to someon
 
 Use it
 ------
-display output of find via libnotify. useful for long searches to display the result when its finished:
+display output of find via libnotify. useful for commands that take their time to display the result as notification when its finished:
 ```bash
 find /bin -iname "b*" | messenger
 ```
